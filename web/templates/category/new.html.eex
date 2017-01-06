@@ -1,0 +1,30 @@
+<div class="columns">
+
+  <div class="column is-half is-offset-one-quarter">
+    <h1>Nowa kategoria</h1>
+
+    <%= form_for @changeset, category_path(@conn, :create), fn f -> %>
+
+    <%= label f, :name, "Nazwa kategorii" %>
+    <p class="contro">
+      <%= text_input f, :name, class: "input" %>
+      <%= error_tag f, :name %>
+    </p>
+
+    <%= label f, :parent_id, "Nadkategoria" %>
+    <p class="control">
+      <span class="select">
+        <%= select f, :parent_id, Enum.map(@categories, &{&1.name, &1.id}) %>
+      </span>
+    </p>
+
+    <p class="control">
+      <%= submit "Dodaj", class: "button is-primary" %>
+      <%= link "Powrót", to: category_path(@conn, :index), class: "button is-link" %>
+    </p>
+  </div>
+</div>
+
+
+
+<% end %>

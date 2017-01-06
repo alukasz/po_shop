@@ -1,0 +1,8 @@
+<h1>Kategorie:</h1>
+<ul>
+  <%= for category <- @categories do %>
+    <li><%= format(category) %></li>
+  <%= end %>
+</ul>
+
+<a href="<%= category_path(@conn, :new) %>">Nowa kategoria</a>
