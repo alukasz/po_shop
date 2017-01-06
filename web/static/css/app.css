@@ -3,3 +3,12 @@
 h1 {
   font-size: 22px;
 }
+
+.menu-label {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+td, td > * {
+    vertical-align : middle !important;
+}

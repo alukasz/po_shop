@@ -1,0 +1,71 @@
+<%= breadcrumbs(@conn, @breadcrumbs) %>
+
+<div class="columns">
+  <div class="column is-2">
+    <aside class="menu">
+      <p class="menu-label is-info has-text-centered">
+        Producent
+      </p>
+      <ul class="menu-list">
+        <%= for producent <-@producents do %>
+          <li><a class="<%= same(producent, @producent) %>"
+            href="<%= category_product_path(@conn, :index, @category, get_params(@conn, %{producent: producent.id})) %>">
+            <%= producent.name %>
+          </a></li>
+        <% end %>
+      </ul>
+
+      <p class="menu-label is-info has-text-centered">
+        Kategorie
+      </p>
+      <ul class="menu-list">
+        <%= for category <- @categories do %>
+          <li>
+            <a href="<%= category_product_path(@conn, :index, category.id, get_params(@conn, %{producent: nil})) %>"
+            class="<%= same(category, @category) %>">
+              <%= category.name %>
+            </a>
+            <%= subcategories(@conn, category, @category) %>
+          </li>
+        <% end %>
+      </ul>
+
+      <p class="menu-label is-info has-text-centered">
+        Sortuj według
+      </p>
+      <ul class="menu-list">
+        <li><a href="<%= category_product_path(@conn, :index, @category, get_params(@conn, %{sort: "name"})) %>">Nazwa</a></li>
+        <li><a href="<%= category_product_path(@conn, :index, @category, get_params(@conn, %{sort: "price"})) %>">Cena</a></li>
+        <li><a href="<%= category_product_path(@conn, :index, @category, get_params(@conn, %{sort: "producent"})) %>">Producent</a></li>
+      </ul>
+    </aside>
+  </div>
+
+  <div class="column">
+    <table class="table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Nazwa</th>
+          <th>Cena</th>
+          <th>Producent</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+      <%= for product <- @products do %>
+        <tr>
+          <td><img src="http://placehold.it/60x60" alt="<%= product.name%>" /></td>
+          <td><%= product.name %></td>
+          <td><%= product.price %></td>
+          <td><%= product.producent.name %></td>
+          <td>
+            <a class="button is-primary" href="<%= category_product_path(@conn, :show, @category, product, get_params(@conn)) %>">Zobacz</a>
+            <a class="button is-primary" href="#">Do koszyka</a>
+          </td>
+        </tr>
+      <%= end %>
+      </tbody>
+    <table>
+  </div>
+</div>

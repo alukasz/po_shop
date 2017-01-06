@@ -9,6 +9,11 @@ defmodule PoShop.Category do
     timestamps()
   end
 
+  def order_by_name(query) do
+    query
+    |> order_by(asc: :name)
+  end
+
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
