@@ -18,7 +18,9 @@ defmodule PoShop.Router do
 
     get "/", PageController, :index
 
-    resources "categories", CategoryController, only: [:index, :new, :create]
+    resources "/categories", CategoryController, only: [:index, :new, :create]
+
+    resources "/producents", ProducentController, only: [:index, :new, :create]
   end
 
   # Other scopes may use custom stacks.

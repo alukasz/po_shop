@@ -1,0 +1,8 @@
+<h1>Producenci:</h1>
+<ul>
+  <%= for producent <- @producents do %>
+    <li><%= producent.name %></li>
+  <%= end %>
+</ul>
+
+<a href="<%= producent_path(@conn, :new) %>">Nowy producent</a>
