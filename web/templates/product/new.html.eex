@@ -19,7 +19,7 @@
 
     <%= label f, :price, "Cena" %>
     <p class="control">
-      <%= number_input f, :price, class: "input" %>
+      <%= number_input f, :price, class: "input", step: "any" %>
       <%= error_tag f, :price %>
     </p>
 

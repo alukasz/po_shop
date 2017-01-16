@@ -18,8 +18,9 @@ defmodule PoShop.ProductView do
     breadcrumbs(conn, [], categories)
   end
 
-  def same(%{id: id1}, %{id: id2}) when id1 == id2, do: "is-active"
-  def same(a, b), do: ""
+  def same(%{__struct__: struct1, id: id1}, %{__struct__: struct2, id: id2})
+    when id1 == id2 and struct1 == struct2, do: "is-active"
+  def same(_a, _b), do: ""
 
   def subcategories(conn, %PoShop.Category{id: id1} = category, %PoShop.Category{id: id2})
     when id1 == id2 do
@@ -29,9 +30,9 @@ defmodule PoShop.ProductView do
     format_subcategories(conn, Enum.sort_by(categories, &(&1.name)))
   end
 
-  def subcategories(conn, _, _), do: ""
+  def subcategories(_conn, _, _), do: ""
 
-  defp format_subcategories(conn, []), do: ""
+  defp format_subcategories(_conn, []), do: ""
   defp format_subcategories(conn, categories) when is_list(categories) do
     content_tag :ul do
       for category <- categories do
@@ -42,7 +43,7 @@ defmodule PoShop.ProductView do
     end
   end
 
-  defp breadcrumbs(conn, io_list, []), do: io_list
+  defp breadcrumbs(_conn, io_list, []), do: io_list
   defp breadcrumbs(conn, io_list, [category | categories]) when length(categories) == 0 do
     [breadcrumb_link(conn, category, "is-disabled")
       | breadcrumbs(conn, io_list, categories)]

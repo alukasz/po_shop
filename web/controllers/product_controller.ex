@@ -47,11 +47,11 @@ defmodule PoShop.ProductController do
 
   def show(conn, params) do
     product = Product
-    |> Repo.get(1)
+    |> Repo.get(params["id"])
     |> Repo.preload(:producent)
-    # |> Repo.preload(:category)
+    |> Repo.preload(:category)
 
-    render conn, "show.html", product: product, breadcrumbs: breadcrumbs(conn) ++ [product]
+    render conn, "show.html", product: product, breadcrumbs: breadcrumbs(conn, product.category) ++ [product]
   end
 
   defp find_category(conn, _params) do
@@ -93,6 +93,13 @@ defmodule PoShop.ProductController do
 
   defp breadcrumbs(conn) do
     breadcrumbs = category(conn)
+    |> Category.ancestors
+    |> Repo.all
+    breadcrumbs ++ [category(conn)]
+  end
+
+  defp breadcrumbs(conn, category) do
+    breadcrumbs = category
     |> Category.ancestors
     |> Repo.all
     breadcrumbs ++ [category(conn)]

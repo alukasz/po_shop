@@ -23,7 +23,7 @@ defmodule PoShop.ProductControllerTest do
     assert html_response(conn, 200) =~ Phoenix.HTML.Safe.to_iodata("can't be blank")
   end
 
-  test "#show with root category shows all products", %{conn: conn} do
+  test "#index with root category shows all products", %{conn: conn} do
     root_category = insert(:category)
     child_category = insert(:category, parent: root_category)
 
@@ -36,7 +36,7 @@ defmodule PoShop.ProductControllerTest do
     assert html_response(conn, 200) =~ product_child.name
   end
 
-  test "#show with child category shows only child category products", %{conn: conn} do
+  test "#index with child category shows only child category products", %{conn: conn} do
     root_category = insert(:category)
     child_category = insert(:category, parent: root_category)
 
@@ -49,7 +49,7 @@ defmodule PoShop.ProductControllerTest do
     assert html_response(conn, 200) =~ product_child.name
   end
 
-  test "#show with child category show child category", %{conn: conn} do
+  test "#index with child category show child category", %{conn: conn} do
     root_category = insert(:category)
     child_category = insert(:category, parent: root_category)
 
@@ -59,7 +59,7 @@ defmodule PoShop.ProductControllerTest do
     assert html_response(conn, 200) =~ child_category.name
   end
 
-  test "#show with child category show sibling category", %{conn: conn} do
+  test "#index with child category show sibling category", %{conn: conn} do
     root_category = insert(:category)
     child_category = insert(:category, parent: root_category)
     sibling_category = insert(:category, parent: root_category)
@@ -70,7 +70,7 @@ defmodule PoShop.ProductControllerTest do
     assert html_response(conn, 200) =~ sibling_category.name
   end
 
-  test "#show with child category does not show parent category", %{conn: conn} do
+  test "#index with child category does not show parent category", %{conn: conn} do
     root_category = insert(:category)
     child_category = insert(:category, parent: root_category)
     sibling_category = insert(:category, parent: root_category)
