@@ -12,4 +12,15 @@ defmodule PoShop.Factory do
       name: sequence(:category_name, &"Producent-#{&1}")
     }
   end
+
+  def product_factory do
+    %PoShop.Product{
+      name: sequence(:product_name, &"Product-#{&1}"),
+      description: "Lorem ipsum",
+      price: 2.99,
+      stock: 10,
+      category: build(:category),
+      producent: build(:producent)
+    }
+  end
 end

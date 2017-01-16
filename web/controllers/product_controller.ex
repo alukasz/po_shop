@@ -8,15 +8,13 @@ defmodule PoShop.ProductController do
   plug :find_category when action in [:index, :show]
   plug :find_producent when action in [:index, :show]
 
-  plug :scrub_params, "comment" when action in [:create]
+  plug :scrub_params, "product" when action in [:create]
 
   def index(conn, params) do
     products = products_with_descendants(conn,
       Map.get(params, "sort", nil),
       Map.get(params, "producent", nil)
     )
-    IO.inspect "lol"
-    IO.inspect producents(conn)
     render conn, "index.html", products: products, breadcrumbs: breadcrumbs(conn),
       categories: categories(conn), producents: producents(conn)
   end
@@ -30,6 +28,31 @@ defmodule PoShop.ProductController do
       changeset: changeset
   end
 
+  def create(conn, %{"product" => params}) do
+    changeset = Product.changeset(%Product{}, params)
+
+    case Repo.insert(changeset) do
+      {:ok, product} ->
+        conn
+        |> put_flash("success", "Produkt został dodany")
+        |> redirect(to: page_path(conn, :index))
+      {:error, changeset} ->
+        categories = Category |> Repo.all
+        producents = Producent |> Repo.all
+        conn
+        |> render("new.html", categories: categories, producents: producents,
+          changeset: changeset)
+    end
+  end
+
+  def show(conn, params) do
+    product = Product
+    |> Repo.get(1)
+    |> Repo.preload(:producent)
+    # |> Repo.preload(:category)
+
+    render conn, "show.html", product: product, breadcrumbs: breadcrumbs(conn) ++ [product]
+  end
 
   defp find_category(conn, _params) do
     assign(conn, :category, Repo.get!(Category, conn.params["category_id"]))
@@ -46,7 +69,7 @@ defmodule PoShop.ProductController do
 
   defp category(conn), do: conn.assigns.category
 
-  defp products_with_descendants(conn, order_by, nil) do
+  defp products_with_descentants(conn, order_by) do
     category_descendants = category(conn)
     |> Category.descendants
     |> Repo.all
@@ -55,18 +78,15 @@ defmodule PoShop.ProductController do
     |> Product.preload
     |> Product.category([category(conn) | category_descendants])
     |> Product.order_by(order_by)
+  end
+
+  defp products_with_descendants(conn, order_by, nil) do
+    products_with_descentants(conn, order_by)
     |> Repo.all
   end
 
   defp products_with_descendants(conn, order_by, producent) do
-    category_descendants = category(conn)
-    |> Category.descendants
-    |> Repo.all
-
-    Product
-    |> Product.preload
-    |> Product.category([category(conn) | category_descendants])
-    |> Product.order_by(order_by)
+    products_with_descentants(conn, order_by)
     |> Product.producent(producent)
     |> Repo.all
   end
@@ -93,6 +113,7 @@ defmodule PoShop.ProductController do
 
     Producent
     |> Producent.for_category([category(conn) | category_descendants])
+    |> Ecto.Query.limit(10)
     |> Repo.all
   end
 end

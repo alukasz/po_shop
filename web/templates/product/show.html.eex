@@ -1,0 +1,70 @@
+<%= breadcrumbs(@conn, @breadcrumbs) %>
+
+<%= if @conn.params["dialog"] == "show" do %>
+<div class="modal is-active" id="dialog">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Dodano do koszyka</p>
+      <button class="delete" onclick="document.getElementById('dialog').remove()"></button>
+    </header>
+    <section class="modal-card-body">
+      <%= @product.name %> został dodany do koszyka.
+    </section>
+    <footer class="modal-card-foot">
+      <a class="button is-info" onclick="document.getElementById('dialog').remove();">Zobacz koszyk</a>
+      <a class="button is-success" onclick="document.getElementById('dialog').remove()">Kontynuuj zakupy</a>
+    </footer>
+  </div>
+</div>
+<% end %>
+
+<div class="columns" style="margin-top: 20px">
+  <div class="column is-half">
+    <img src="http://placehold.it/500x300">
+
+  </div>
+  <div class="column is-half">
+    <form style="margin-top: 40px" method="get" action='<%= category_product_path(@conn, :show, @category.id, @product.id, get_params(@conn, %{"dialog" => "show"}))%>'>
+      <input type="hidden" name="dialog" value="show">
+      <div class="control is-horizontal">
+        <div class="control-label">
+          <label class="label is-large" style="font-size: 20px; line-height: 39px">Cena: </label>
+        </div>
+
+        <p class="control">
+          <label class="label is-large" style="font-size: 20px; line-height: 39px; margin-top: 7px; "> <%= @product.price %> </label>
+        </p>
+      </div>
+
+      <div class="control is-horizontal">
+        <div class="control-label">
+          <label class="label is-large" style="font-size: 20px; line-height: 39px">Ilość:</label>
+        </div>
+          <p class="control">
+            <input class="input is-large" type="number" value="1" style="width: 60px; margin-right: 15px">
+            <button class="button is-success is-large is-expanded">Dodaj do koszyka</button>
+
+          </p>
+      </div>
+
+      <div class="control is-expanded">
+      <p class="control">
+      </p>
+    </div>
+    </form>
+  </div>
+</div>
+
+<div>
+  <h3 style="font-size: 30px;"><%= @product.name %></h3>
+  <p>
+    <%= @product.description %>
+  </p>
+
+  <p style="margin-top: 20px;">
+    <strong>Producent: <%= @product.producent.name %></strong>
+  </p>
+</div>
+
+<a class="button is-info is-medium" style="margin-top: 20px" href="<%= category_product_path(@conn, :index, @category, get_params(@conn)) %>">Powrót</a>

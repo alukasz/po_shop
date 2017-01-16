@@ -53,7 +53,7 @@ defmodule PoShop.ProductView do
   end
 
   defp breadcrumb_link(conn, category, disabled \\ "") do
-    link(category.name, to: category_product_path(conn, :index, category), class: "button is-link #{disabled}")
+    link(category.name, to: category_product_path(conn, :index, category, get_params(conn)), class: "button is-link #{disabled}")
   end
   defp breadcrumb_separator do
     content_tag :span, " > ", class: "button is-link is-disabled", style: "text-decoration: none"

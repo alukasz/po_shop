@@ -1,9 +1,9 @@
 <div class="columns">
 
   <div class="column is-half is-offset-one-quarter">
-    <h1>Nowa kategoria</h1>
+    <h1>Nowy produkt</h1>
 
-    <%= form_for @changeset, category_path(@conn, :create), fn f -> %>
+    <%= form_for @changeset, product_path(@conn, :create), fn f -> %>
 
     <%= label f, :name, "Nazwa produktu" %>
     <p class="control">
@@ -29,11 +29,12 @@
       <%= error_tag f, :stock %>
     </p>
 
-    <%= label f, :category_id, "Producent" %>
+    <%= label f, :producent_id, "Producent" %>
     <p class="control">
       <span class="select">
-        <%= select f, :category_id, Enum.map(@producents, &{&1.name, &1.id}) %>
+        <%= select f, :producent_id, Enum.map(@producents, &{&1.name, &1.id}) %>
       </span>
+      <%= error_tag f, :producent_id %>
     </p>
 
     <%= label f, :category_id, "Kategoria" %>
@@ -41,11 +42,12 @@
       <span class="select">
         <%= select f, :category_id, Enum.map(@categories, &{&1.name, &1.id}) %>
       </span>
+      <%= error_tag f, :category_id %>
     </p>
 
     <p class="control">
       <%= submit "Dodaj", class: "button is-primary" %>
-      <%= link "Powrót", to: product_path(@conn, :index), class: "button is-link" %>
+
     </p>
   </div>
 </div>

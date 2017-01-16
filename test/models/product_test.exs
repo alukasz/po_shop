@@ -3,7 +3,7 @@ defmodule PoShop.ProductTest do
 
   alias PoShop.Product
 
-  @valid_attrs %{description: "some content", name: "some content", price: "120.5", stock: 42}
+  @valid_attrs %{description: "some content", name: "some content", price: "120.5", stock: 42, producent_id: 1, category_id: 1}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

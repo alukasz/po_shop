@@ -34,14 +34,23 @@
         Sortuj według
       </p>
       <ul class="menu-list">
-        <li><a href="<%= category_product_path(@conn, :index, @category, get_params(@conn, %{sort: "name"})) %>">Nazwa</a></li>
-        <li><a href="<%= category_product_path(@conn, :index, @category, get_params(@conn, %{sort: "price"})) %>">Cena</a></li>
-        <li><a href="<%= category_product_path(@conn, :index, @category, get_params(@conn, %{sort: "producent"})) %>">Producent</a></li>
+        <li><a <%= if @conn.params["sort"] == "name", do: "class=is-active" %>
+          href="<%= category_product_path(@conn, :index, @category, get_params(@conn, %{sort: "name"})) %>">Nazwa</a></li>
+        <li><a  <%= if @conn.params["sort"] == "price", do: "class=is-active" %>
+          href="<%= category_product_path(@conn, :index, @category, get_params(@conn, %{sort: "price"})) %>">Cena</a></li>
+        <li><a  <%= if @conn.params["sort"] == "producent", do: "class=is-active" %>
+          href="<%= category_product_path(@conn, :index, @category, get_params(@conn, %{sort: "producent"})) %>">Producent</a></li>
       </ul>
     </aside>
   </div>
 
   <div class="column">
+    <%= if length(@products) == 0 do %>
+      <p style="margin: 15px">
+        Brak produktów w danej kategorii.
+      </p>
+    <% else %>
+
     <table class="table">
       <thead>
         <tr>
@@ -61,11 +70,12 @@
           <td><%= product.producent.name %></td>
           <td>
             <a class="button is-primary" href="<%= category_product_path(@conn, :show, @category, product, get_params(@conn)) %>">Zobacz</a>
-            <a class="button is-primary" href="#">Do koszyka</a>
+            <a class="button is-success" href="#">Do koszyka</a>
           </td>
         </tr>
       <%= end %>
       </tbody>
     <table>
+      <% end %>
   </div>
 </div>
