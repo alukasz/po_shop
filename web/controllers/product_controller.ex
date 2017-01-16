@@ -16,7 +16,7 @@ defmodule PoShop.ProductController do
       Map.get(params, "producent", nil)
     )
     render conn, "index.html", products: products, breadcrumbs: breadcrumbs(conn),
-      categories: categories(conn), producents: producents(conn)
+      categories: get_categories(conn), producents: producents(conn)
   end
 
   def new(conn, _params) do
@@ -70,7 +70,8 @@ defmodule PoShop.ProductController do
   defp category(conn), do: conn.assigns.category
 
   defp products_with_descentants(conn, order_by) do
-    category_descendants = category(conn)
+    category_descendants = conn
+    |> category
     |> Category.descendants
     |> Repo.all
 
@@ -81,18 +82,21 @@ defmodule PoShop.ProductController do
   end
 
   defp products_with_descendants(conn, order_by, nil) do
-    products_with_descentants(conn, order_by)
+    conn
+    |> products_with_descentants(order_by)
     |> Repo.all
   end
 
   defp products_with_descendants(conn, order_by, producent) do
-    products_with_descentants(conn, order_by)
+    conn
+    |> products_with_descentants(order_by)
     |> Product.producent(producent)
     |> Repo.all
   end
 
   defp breadcrumbs(conn) do
-    breadcrumbs = category(conn)
+    breadcrumbs = conn
+    |> category
     |> Category.ancestors
     |> Repo.all
     breadcrumbs ++ [category(conn)]
@@ -105,8 +109,9 @@ defmodule PoShop.ProductController do
     breadcrumbs ++ [category(conn)]
   end
 
-  defp categories(conn) do
-    categories = category(conn)
+  defp get_categories(conn) do
+    categories = conn
+    |> category
     |> Category.siblings
     |> Repo.all
     categories ++ [category(conn)]
@@ -114,7 +119,8 @@ defmodule PoShop.ProductController do
   end
 
   def producents(conn) do
-    category_descendants = category(conn)
+    category_descendants = conn
+    |> category
     |> Category.descendants
     |> Repo.all
 

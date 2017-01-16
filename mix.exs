@@ -10,7 +10,8 @@ defmodule PoShop.Mixfile do
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      aliases: aliases(),
-     deps: deps()]
+     deps: deps(),
+     dialyzer: [plt_add_deps: :transitive]]
   end
 
   # Configuration for the OTP application.
@@ -39,7 +40,9 @@ defmodule PoShop.Mixfile do
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
      {:ex_machina, "~> 1.0", only: :test},
-     {:arbor, "~> 1.0.3"}]
+     {:arbor, "~> 1.0.3"},
+     {:dialyxir, "~> 0.3.5", only: [:dev]},
+     {:credo, "~> 0.5", only: [:dev, :test]}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

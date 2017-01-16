@@ -16,7 +16,7 @@ defmodule PoShop.CategoryController do
   def new(conn, _params) do
     changeset = Category.changeset(%Category{})
 
-    render conn, "new.html", changeset: changeset, categories: categories()
+    render conn, "new.html", changeset: changeset, categories: get_categories()
   end
 
   def create(conn, %{"category" => category_params}) do
@@ -32,7 +32,7 @@ defmodule PoShop.CategoryController do
     end
   end
 
-  defp categories do
+  defp get_categories do
     categories = Category |> Repo.all
     [%Category{} | categories]
   end
