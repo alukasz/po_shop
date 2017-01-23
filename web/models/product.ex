@@ -1,6 +1,10 @@
 defmodule PoShop.Product do
   use PoShop.Web, :model
 
+  @moduledoc """
+  Represents Product.
+  """
+
   schema "products" do
     field :name, :string
     field :description, :string
@@ -21,9 +25,6 @@ defmodule PoShop.Product do
     |> preload([p, c], [category: c])
     |> join(:inner, [p], m in assoc(p, :producent))
     |> preload([p, _c, m], [producent: m])
-
-    # |> select([p, c, m], {p, c, m})
-    # |> select([p, c, m], %{price: p.price, name: p.name, category: c.name, producent: m.name})
   end
 
   @doc """
@@ -44,12 +45,11 @@ defmodule PoShop.Product do
   end
 
   def order_by(query, clause) do
-    clause = case clause do
+    case clause do
       "price" -> query |> order_by([p, _c, _m], asc: p.price)
       "producent" -> query |> order_by([_p, _c, m], asc: m.name)
       _ -> query |> order_by([p, _c, _m], asc: p.name)
     end
-
   end
 
   def producent(query, "") do

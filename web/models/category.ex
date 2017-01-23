@@ -2,6 +2,10 @@ defmodule PoShop.Category do
   use PoShop.Web, :model
   use Arbor.Tree
 
+  @moduledoc """
+  Represents Category.
+  """
+
   schema "categories" do
     field :name, :string
     belongs_to :parent, PoShop.Category

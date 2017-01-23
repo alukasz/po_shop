@@ -10,7 +10,7 @@ defmodule PoShop.ProductControllerTest do
 
   @tag :pending
   test "#create with valid params inserts product", %{conn: conn} do
-    params = params_with_assocs(:product)
+    params = params_with_assocs(:product, %{price: "2.99"})
 
     conn = post conn, product_path(conn, :create, %{"product" => params})
 
@@ -21,6 +21,15 @@ defmodule PoShop.ProductControllerTest do
     conn = post conn, product_path(conn, :create, %{"product" => %{"name" => ""}})
 
     assert html_response(conn, 200) =~ Phoenix.HTML.Safe.to_iodata("can't be blank")
+  end
+
+  test "#index show products", %{conn: conn} do
+    product = insert(:product)
+
+    conn = get conn, category_product_path(conn, :index, product.category)
+
+    assert html_response(conn, 200) =~ product.name
+    assert html_response(conn, 200) =~ product.producent.name
   end
 
   test "#index with root category shows all products", %{conn: conn} do
@@ -73,11 +82,27 @@ defmodule PoShop.ProductControllerTest do
   test "#index with child category does not show parent category", %{conn: conn} do
     root_category = insert(:category)
     child_category = insert(:category, parent: root_category)
-    sibling_category = insert(:category, parent: root_category)
 
     conn = get conn, category_product_path(conn, :index, child_category)
 
     assert html_response(conn, 200) =~ child_category.name
     refute html_response(conn, 200) =~ "<div class='menu-list'>/.*#{root_category.name}.*/</div>/"
+  end
+
+  test "#index can filter products by producent", %{conn: conn} do
+    category = insert(:category)
+    producent_visible = insert(:producent)
+    producent_hidden = insert(:producent)
+    product_visible = insert(:product, %{producent: producent_visible, category: category})
+    product_hidden = insert(:product, %{producent: producent_hidden, category: category})
+
+    conn = get conn, category_product_path(conn, :index, category, %{producent: producent_visible.id})
+
+    assert html_response(conn, 200) =~ product_visible.name
+    refute html_response(conn, 200) =~ product_hidden.name
+  end
+
+  test "#show shows product", %{conn: conn} do
+    product = insert(:product)
   end
 end

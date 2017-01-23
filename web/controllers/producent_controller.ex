@@ -5,6 +5,9 @@ defmodule PoShop.ProducentController do
 
   plug :scrub_params, "producent" when action in [:create]
 
+  @doc """
+  Returns all producents.
+  """
   def index(conn, _params) do
     producents = Producent
     |> Repo.all
@@ -12,12 +15,18 @@ defmodule PoShop.ProducentController do
     render conn, "index.html", producents: producents
   end
 
+  @doc """
+  Renders form for producent.
+  """
   def new(conn, _params) do
     changeset = Producent.changeset(%Producent{})
 
     render conn, "new.html", changeset: changeset
   end
 
+  @doc """
+  Inserts producent in the database. If producent params are invalid, rerenders form
+  """
   def create(conn, %{"producent" => producent_params}) do
     changeset = Producent.changeset(%Producent{}, producent_params)
 

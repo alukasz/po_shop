@@ -1,6 +1,10 @@
 defmodule PoShop.Producent do
   use PoShop.Web, :model
 
+  @moduledoc """
+  Represents Producent.
+  """
+
   schema "producents" do
     field :name, :string
 

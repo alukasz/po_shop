@@ -44,7 +44,7 @@ defmodule PoShop.ProductViewTest do
     assert ProductView.same(object_one, object_two) == ""
   end
 
-  defp in_html(needle, list_of_safe) do
+  defp in_html(needle, [safe: _] = list_of_safe) do
     safe = Keyword.get_values(list_of_safe, :safe) |> List.flatten
     needle in safe
   end

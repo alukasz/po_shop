@@ -10,6 +10,9 @@ defmodule PoShop.ProductController do
 
   plug :scrub_params, "product" when action in [:create]
 
+  @doc """
+  Renders all products for given category.
+  """
   def index(conn, params) do
     products = products_with_descendants(conn,
       Map.get(params, "sort", nil),
@@ -19,6 +22,9 @@ defmodule PoShop.ProductController do
       categories: get_categories(conn), producents: producents(conn)
   end
 
+  @doc """
+  Renders form for creating a new product.
+  """
   def new(conn, _params) do
     categories = Category |> Repo.all
     producents = Producent |> Repo.all
@@ -28,11 +34,14 @@ defmodule PoShop.ProductController do
       changeset: changeset
   end
 
+  @doc """
+  Inserts product in the database. If product params are invalid, rerenders form
+  """
   def create(conn, %{"product" => params}) do
     changeset = Product.changeset(%Product{}, params)
 
     case Repo.insert(changeset) do
-      {:ok, product} ->
+      {:ok, _product} ->
         conn
         |> put_flash("success", "Produkt został dodany")
         |> redirect(to: page_path(conn, :index))
@@ -45,6 +54,9 @@ defmodule PoShop.ProductController do
     end
   end
 
+  @doc """
+  Renders product page.
+  """
   def show(conn, params) do
     product = Product
     |> Repo.get(params["id"])
@@ -54,10 +66,16 @@ defmodule PoShop.ProductController do
     render conn, "show.html", product: product, breadcrumbs: breadcrumbs(conn, product.category) ++ [product]
   end
 
+  @doc """
+  Assigns category from params
+  """
   defp find_category(conn, _params) do
     assign(conn, :category, Repo.get!(Category, conn.params["category_id"]))
   end
 
+  @doc """
+  Assigns producent from params
+  """
   defp find_producent(conn, _params) do
     case conn.params["producent"] do
       "" -> assign(conn, :producent, %Producent{})
@@ -67,8 +85,14 @@ defmodule PoShop.ProductController do
 
   end
 
+  @doc """
+  Returns current category.
+  """
   defp category(conn), do: conn.assigns.category
 
+  @doc """
+  Returns all products of given category and it's children categories.
+  """
   defp products_with_descentants(conn, order_by) do
     category_descendants = conn
     |> category
@@ -81,12 +105,18 @@ defmodule PoShop.ProductController do
     |> Product.order_by(order_by)
   end
 
+  @doc """
+  Returns all products of given category and it's children categories.
+  """
   defp products_with_descendants(conn, order_by, nil) do
     conn
     |> products_with_descentants(order_by)
     |> Repo.all
   end
 
+  @doc """
+  Returns all products of given category and it's children categories for given producent.
+  """
   defp products_with_descendants(conn, order_by, producent) do
     conn
     |> products_with_descentants(order_by)
@@ -94,6 +124,9 @@ defmodule PoShop.ProductController do
     |> Repo.all
   end
 
+  @doc """
+  Returns breadcrumbs for given category (path from root category to current category).
+  """
   defp breadcrumbs(conn) do
     breadcrumbs = conn
     |> category
@@ -102,6 +135,9 @@ defmodule PoShop.ProductController do
     breadcrumbs ++ [category(conn)]
   end
 
+  @doc """
+  Returns breadcrumbs for given category (path from root category to current category).
+  """
   defp breadcrumbs(conn, category) do
     breadcrumbs = category
     |> Category.ancestors
@@ -109,6 +145,9 @@ defmodule PoShop.ProductController do
     breadcrumbs ++ [category(conn)]
   end
 
+  @doc """
+  Returns siblings of current category + current category.
+  """
   defp get_categories(conn) do
     categories = conn
     |> category
@@ -118,6 +157,9 @@ defmodule PoShop.ProductController do
     |> Enum.sort_by(&(&1.name))
   end
 
+  @doc """
+  Returns producents for given category and it's children categories.
+  """
   def producents(conn) do
     category_descendants = conn
     |> category
