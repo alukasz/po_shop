@@ -25,6 +25,11 @@ defmodule PoShop.Router do
     end
 
     resources "/producents", ProducentController, only: [:index, :new, :create]
+
+    get "/cart", CartController, :index
+    post "/cart", CartController, :create
+    put "/cart", CartController, :update
+    delete "/cart", CartController, :delete
   end
 
   # Other scopes may use custom stacks.

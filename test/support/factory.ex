@@ -23,4 +23,8 @@ defmodule PoShop.Factory do
       producent: build(:producent)
     }
   end
+
+  def cart_factory do
+    %PoShop.Cart{}
+  end
 end
