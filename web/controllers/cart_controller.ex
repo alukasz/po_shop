@@ -6,7 +6,11 @@ defmodule PoShop.CartController do
   plug :find_or_create
 
   def index(conn, _params) do
-    render conn, "index.html"
+    cart = conn.assigns.cart |> Repo.preload([products: :producent])
+
+    total_price = cart.products |> Enum.reduce(0, &(&1.price + &2))
+
+    render conn, "index.html", cart: cart, total_price: total_price
   end
 
   defp find_or_create(conn, _params) do

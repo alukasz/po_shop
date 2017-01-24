@@ -1,1 +1,10 @@
-hiho from cart
+<%= if length(@cart.products) == 0 do %>
+  Brak produtków w koszyku.
+
+<% else %>
+<%= for product <- @cart.products do %>
+  <%= product.name %>
+<% end %>
+
+Razem: <%= @total_price %>
+<%= end %>

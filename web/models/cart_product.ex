@@ -8,8 +8,6 @@ defmodule PoShop.CartProduct do
 
     belongs_to :cart, Cart
     belongs_to :product, Product
-
-    timestamps()
   end
 
   @doc """
