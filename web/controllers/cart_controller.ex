@@ -28,8 +28,6 @@ defmodule PoShop.CartController do
         |> Repo.update()
     end
 
-    IO.inspect NavigationHistory.last_path(conn)
-
     redirect conn, to: NavigationHistory.last_path(conn, default:  "/") <> "?dialog=show"
   end
 
