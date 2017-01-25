@@ -30,7 +30,7 @@ defmodule PoShop.CartController do
 
     IO.inspect NavigationHistory.last_path(conn)
 
-    redirect conn, to: NavigationHistory.last_path(conn) <> "?dialog=show"
+    redirect conn, to: NavigationHistory.last_path(conn, default:  "/") <> "?dialog=show"
   end
 
   def update(conn, %{"product_id" => product_id, "amount" => amount}) do
@@ -40,7 +40,7 @@ defmodule PoShop.CartController do
     changeset = CartProduct.changeset(cart_product, %{"amount" => amount})
     Repo.update(changeset)
 
-    redirect conn, to: NavigationHistory.last_path(conn)
+    redirect conn, to: NavigationHistory.last_path(conn, default:  "/")
   end
 
   def delete(conn, %{"product_id" => product_id}) do
