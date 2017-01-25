@@ -28,7 +28,14 @@ defmodule PoShop.Factory do
     %PoShop.Cart{}
   end
 
+  def cart_product_factory do
+    %PoShop.CartProduct{
+      amount: 1,
+      product: build(:product)
+    }
+  end
+
   def with_products(cart, number \\ 1) do
-    %{cart | products: build_list(number, :product)}
+    %{cart | cart_products: build_list(number, :cart_product)}
   end
 end

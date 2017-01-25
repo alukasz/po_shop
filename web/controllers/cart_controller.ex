@@ -18,9 +18,25 @@ defmodule PoShop.CartController do
   def create(conn, %{"product_id" => product_id}) do
     product = Repo.get!(Product, product_id)
 
-    changeset = CartProduct.changeset(%CartProduct{}, %{"product_id" => product_id, "cart_id" => conn.assigns.cart.id, "amount" => 1})
-
+    changeset = CartProduct.changeset(%CartProduct{}, %{"product_id" => product.id, "cart_id" => conn.assigns.cart.id, "amount" => 1})
     Repo.insert(changeset)
+
+    conn
+  end
+
+  def update(conn, %{"product_id" => product_id, "amount" => amount}) do
+    product = Repo.get!(Product, product_id)
+    cart_product = CartProduct.get(product_id: product.id, cart_id: conn.assigns.cart.id) |> Repo.one!
+
+    changeset = CartProduct.changeset(cart_product, %{"amount" => amount})
+    Repo.update(changeset)
+
+    conn
+  end
+
+  def delete(conn, %{"product_id" => product_id}) do
+    product = Repo.get!(Product, product_id)
+    CartProduct.get(product_id: product.id, cart_id: conn.assigns.cart.id) |> Repo.one! |> Repo.delete!
 
     conn
   end

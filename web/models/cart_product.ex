@@ -10,6 +10,12 @@ defmodule PoShop.CartProduct do
     belongs_to :product, Product
   end
 
+  def get(product_id: product_id, cart_id: cart_id) do
+    from cp in __MODULE__,
+      where: cp.product_id == ^product_id,
+      where: cp.cart_id == ^cart_id
+  end
+
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """

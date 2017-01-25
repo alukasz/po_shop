@@ -1,7 +1,6 @@
 defmodule PoShop.CartControllerTest do
   use PoShop.ConnCase
   import PoShop.Factory
-  alias PoShop.Cart
 
   @session Plug.Session.init(
    store: :cookie,
@@ -39,16 +38,16 @@ defmodule PoShop.CartControllerTest do
 
     conn = get conn, cart_path(conn, :index)
 
-    total_price = cart.products |> Enum.reduce(0.0, &(&1.price + &2))
-    for product <- cart.products do
-      assert html_response(conn, 200) =~ product.name
+    total_price = cart.cart_products |> Enum.reduce(0.0, &(&1.product.price + &2))
+    for cart_product <- cart.cart_products do
+      assert html_response(conn, 200) =~ cart_product.product.name
     end
 
     assert html_response(conn, 200) =~ to_string(total_price)
   end
 
   test "#index renders message with empty cart", %{conn: conn} do
-    cart = insert(:cart)
+    insert(:cart)
 
     conn = get conn, cart_path(conn, :index)
 
@@ -63,5 +62,28 @@ defmodule PoShop.CartControllerTest do
     cart = Repo.preload(conn.assigns.cart, cart_products: :product)
 
     assert product.id in (cart.cart_products |> Enum.map(&(&1.product.id)))
+  end
+
+  test "#update updates amount of product in the cart", %{conn: conn} do
+    cart = build(:cart) |> with_products |> insert
+    cart_product = hd cart.cart_products
+    conn = put_session(conn, :cart, cart.id)
+
+    conn = put conn, cart_path(conn, :update, %{product_id: cart_product.product.id, amount: 5})
+
+    cart = Repo.preload(conn.assigns.cart, cart_products: :product)
+    cart_product = hd cart.cart_products
+    assert cart_product.amount == 5
+  end
+
+  test "#delete removes product from cart", %{conn: conn} do
+    cart = build(:cart) |> with_products |> insert
+    cart_product = hd cart.cart_products
+    conn = put_session(conn, :cart, cart.id)
+
+    conn = delete conn, cart_path(conn, :delete, %{product_id: cart_product.product.id})
+
+    cart = Repo.preload(conn.assigns.cart, cart_products: :product)
+    refute cart_product in cart.cart_products
   end
 end

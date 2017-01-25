@@ -2,9 +2,9 @@
   Brak produtków w koszyku.
 
 <% else %>
-<%= for cart_product <- @cart.cart_products do %>
-  <%= cart_product.product.name %>
-<% end %>
+  <%= for cart_product <- @cart.cart_products do %>
+    <%= cart_product.product.name %>
+  <% end %>
 
-Razem: <%= @total_price %>
+  Razem: <%= @total_price %>
 <%= end %>
