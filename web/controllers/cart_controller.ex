@@ -24,7 +24,7 @@ defmodule PoShop.CartController do
         CartProduct.changeset(%CartProduct{}, %{"product_id" => product.id, "cart_id" => conn.assigns.cart.id, "amount" => amount})
         |> Repo.insert()
       cart_product ->
-        CartProduct.changeset(cart_product, %{"amount" => 1})
+        CartProduct.changeset(cart_product, %{"amount" => amount})
         |> Repo.update()
     end
 

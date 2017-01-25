@@ -35,7 +35,6 @@ defmodule PoShop.Product do
     query
     |> where([_p, c], c.id in ^categories)
   end
-
   @doc """
   Limit products to given category
   """
@@ -52,9 +51,7 @@ defmodule PoShop.Product do
     end
   end
 
-  def producent(query, "") do
-    query
-  end
+  def producent(query, ""), do: query
 
   def producent(query, producent_id) do
     query

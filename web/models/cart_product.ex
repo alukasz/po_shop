@@ -1,17 +1,15 @@
 defmodule PoShop.CartProduct do
   use PoShop.Web, :model
-  alias PoShop.Product
-  alias PoShop.Cart
 
   schema "carts_products" do
     field :amount, :integer
 
-    belongs_to :cart, Cart
-    belongs_to :product, Product
+    belongs_to :cart, PoShop.Cart
+    belongs_to :product, PoShop.Product
   end
 
   def get(product_id: product_id, cart_id: cart_id) do
-    from cp in __MODULE__,
+    from cp in PoShop.CartProduct,
       where: cp.product_id == ^product_id,
       where: cp.cart_id == ^cart_id
   end

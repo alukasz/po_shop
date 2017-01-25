@@ -14,8 +14,8 @@ defmodule PoShop.ProductController do
   Renders all products for given category.
   """
   def index(conn, params) do
-    products = products_with_descendants(conn,
-      Map.get(params, "sort", nil),
+    products = current_products(conn,
+      Map.get(params, "sort", "name"),
       Map.get(params, "producent", nil)
     )
     render conn, "index.html", products: products, breadcrumbs: breadcrumbs(conn),
@@ -93,7 +93,7 @@ defmodule PoShop.ProductController do
   @doc """
   Returns all products of given category and it's children categories.
   """
-  defp products_with_descentants(conn, order_by) do
+  defp current_products(conn, order_by) do
     category_descendants = conn
     |> category
     |> Category.descendants
@@ -108,18 +108,18 @@ defmodule PoShop.ProductController do
   @doc """
   Returns all products of given category and it's children categories.
   """
-  defp products_with_descendants(conn, order_by, nil) do
+  defp current_products(conn, order_by, nil) do
     conn
-    |> products_with_descentants(order_by)
+    |> current_products(order_by)
     |> Repo.all
   end
 
   @doc """
   Returns all products of given category and it's children categories for given producent.
   """
-  defp products_with_descendants(conn, order_by, producent) do
+  defp current_products(conn, order_by, producent) do
     conn
-    |> products_with_descentants(order_by)
+    |> current_products(order_by)
     |> Product.producent(producent)
     |> Repo.all
   end
@@ -134,9 +134,8 @@ defmodule PoShop.ProductController do
     |> Repo.all
     breadcrumbs ++ [category(conn)]
   end
-
   @doc """
-  Returns breadcrumbs for given category (path from root category to current category).
+  Returns breadcrumbs for given category (path from root category to given category).
   """
   defp breadcrumbs(conn, category) do
     breadcrumbs = category

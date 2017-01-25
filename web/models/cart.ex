@@ -1,11 +1,9 @@
 defmodule PoShop.Cart do
   use PoShop.Web, :model
-  alias PoShop.Product
-  alias PoShop.CartProduct
 
   schema "carts" do
-    many_to_many :products, Product, join_through: CartProduct
-    has_many :cart_products, CartProduct
+    many_to_many :products, PoShop.Product, join_through: PoShop.CartProduct
+    has_many :cart_products, PoShop.CartProduct
 
     timestamps()
   end
