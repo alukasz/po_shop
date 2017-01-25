@@ -103,6 +103,12 @@ defmodule PoShop.ProductControllerTest do
   end
 
   test "#show shows product", %{conn: conn} do
-    product = insert(:product)
+    category = insert(:category)
+    product = insert(:product, category: category)
+
+    conn = get conn, category_product_path(conn, :show, category.id, product.id)
+
+    assert html_response(conn, 200) =~ product.name
+    assert html_response(conn, 200) =~ to_string(product.price)
   end
 end
