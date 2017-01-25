@@ -5,6 +5,7 @@ defmodule PoShop.Cart do
 
   schema "carts" do
     many_to_many :products, Product, join_through: CartProduct
+    has_many :cart_products, CartProduct
 
     timestamps()
   end

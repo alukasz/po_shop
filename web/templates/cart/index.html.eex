@@ -1,9 +1,9 @@
-<%= if length(@cart.products) == 0 do %>
+<%= if length(@cart.cart_products) == 0 do %>
   Brak produtków w koszyku.
 
 <% else %>
-<%= for product <- @cart.products do %>
-  <%= product.name %>
+<%= for cart_product <- @cart.cart_products do %>
+  <%= cart_product.product.name %>
 <% end %>
 
 Razem: <%= @total_price %>
