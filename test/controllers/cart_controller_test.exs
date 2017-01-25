@@ -57,7 +57,7 @@ defmodule PoShop.CartControllerTest do
   test "#create adds product to the cart", %{conn: conn} do
     product = insert(:product)
 
-    conn = post conn, cart_path(conn, :create, %{product_id: product.id})
+    conn = post conn, cart_path(conn, :create, %{product_id: product.id, amount: 1})
 
     cart = Repo.preload(conn.assigns.cart, cart_products: :product)
 

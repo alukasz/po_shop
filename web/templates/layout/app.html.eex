@@ -16,8 +16,60 @@
     <div class="section">
       <div class="container">
 
+        <nav class="nav" style="margin-bottom: 20px">
+          <!-- <div class="nav-left">
+            <a class="nav-item">
+              <img src="http://bulma.io/images/bulma-logo.png" alt="Bulma logo">
+            </a>
+          </div> -->
+
+
+          <!-- This "nav-toggle" hamburger menu is only visible on mobile -->
+          <!-- You need JavaScript to toggle the "is-active" class on "nav-menu" -->
+          <span class="nav-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+
+          <!-- This "nav-menu" is hidden on mobile -->
+          <!-- Add the modifier "is-active" to display it on mobile -->
+          <div class="nav-right nav-menu">
+            <span class="nav-item">
+              <a class="button is-primary" href="<%= category_product_path(@conn, :index, 1) %>">
+                <span>Sklep</span>
+              </a>
+            </span>
+
+            <span class="nav-item">
+              <a class="button is-primary" href="<%= cart_path(@conn, :index) %>">
+                <span>Koszyk</span>
+              </a>
+            </span>
+          </div>
+        </nav>
+
         <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
         <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+
+        <%= if @conn.params["dialog"] == "show" do %>
+        <div class="modal is-active" id="dialog">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Dodano do koszyka</p>
+              <button class="delete" onclick="document.getElementById('dialog').remove()"></button>
+            </header>
+            <section class="modal-card-body">
+              Produkt został dodany do koszyka.
+            </section>
+            <footer class="modal-card-foot">
+              <a class="button is-info" href="<%= cart_path(@conn, :index) %>">Zobacz koszyk</a>
+              <a class="button is-success" onclick="document.getElementById('dialog').remove()">Kontynuuj zakupy</a>
+            </footer>
+          </div>
+        </div>
+        <% end %>
 
         <main>
           <%= render @view_module, @view_template, assigns %>

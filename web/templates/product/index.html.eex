@@ -46,9 +46,9 @@
 
   <div class="column">
     <%= if length(@products) == 0 do %>
-      <p style="margin: 15px">
-        Brak produktów w danej kategorii.
-      </p>
+        <div class="notification is-info">
+          Brak produktów w danej kategorii.
+        </div>
     <% else %>
 
     <table class="table">
@@ -70,7 +70,12 @@
           <td><%= product.producent.name %></td>
           <td>
             <a class="button is-primary" href="<%= category_product_path(@conn, :show, @category, product, get_params(@conn)) %>">Zobacz</a>
-            <a class="button is-success" href="#">Do koszyka</a>
+            <form style="display: inline-block" action="<%= cart_path(@conn, :create) %>" method="post">
+              <input type="hidden" name="product_id" value="<%= product.id %>">
+              <input type="hidden" name="amount" value="1">
+              <input type="hidden" name="_csrf_token" value="<%= get_csrf_token() %>">
+              <input type="submit" class="button is-success" value="Dodaj do koszyka">
+            </form>
           </td>
         </tr>
       <%= end %>

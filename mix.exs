@@ -43,7 +43,8 @@ defmodule PoShop.Mixfile do
      {:arbor, "~> 1.0.3"},
      {:dialyxir, "~> 0.3.5", only: [:dev]},
      {:credo, "~> 0.5", only: [:dev, :test]},
-     {:ex_doc, "~> 0.11", only: :dev}]
+     {:ex_doc, "~> 0.11", only: :dev},
+     {:navigation_history, "~> 0.1.0"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
