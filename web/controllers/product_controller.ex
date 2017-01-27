@@ -75,7 +75,6 @@ defmodule PoShop.ProductController do
     |> Repo.preload(:producent)
     |> Repo.preload(:category)
 
-
     render conn, "index.html", products: products, breadcrumbs: [root_category], categories: [], producents: []
   end
 

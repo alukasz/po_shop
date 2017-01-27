@@ -28,7 +28,8 @@ defmodule PoShop.CartController do
         |> Repo.update()
     end
 
-    redirect conn, to: NavigationHistory.last_path(conn, default:  "/") <> "?dialog=show"
+    q = conn.params["q"]
+    redirect conn, to: NavigationHistory.last_path(conn, default:  "/") <> "?dialog=show" <> if q, do: "&q=#{q}", else: ""
   end
 
   def update(conn, %{"product_id" => product_id, "amount" => amount}) do

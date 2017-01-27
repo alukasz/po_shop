@@ -73,6 +73,7 @@
             <form style="display: inline-block" action="<%= cart_path(@conn, :create) %>" method="post">
               <input type="hidden" name="product_id" value="<%= product.id %>">
               <input type="hidden" name="amount" value="1">
+              <input type="hidden" name="q" value="<%= @conn.params["q"] %>">
               <input type="hidden" name="_csrf_token" value="<%= get_csrf_token() %>">
               <input type="submit" class="button is-success" value="Dodaj do koszyka">
             </form>
