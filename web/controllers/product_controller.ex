@@ -66,6 +66,19 @@ defmodule PoShop.ProductController do
     render conn, "show.html", product: product, breadcrumbs: breadcrumbs(conn, product.category) ++ [product]
   end
 
+  def search(conn, %{"q" => search_term}) do
+    root_category = Category |> Repo.get(1)
+    conn = assign(conn, :category, root_category)
+    products = Product
+    |> Product.search(search_term)
+    |> Repo.all
+    |> Repo.preload(:producent)
+    |> Repo.preload(:category)
+
+
+    render conn, "index.html", products: products, breadcrumbs: [root_category], categories: [], producents: []
+  end
+
   @doc """
   Assigns category from params
   """

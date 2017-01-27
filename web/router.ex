@@ -31,6 +31,8 @@ defmodule PoShop.Router do
     post "/cart", CartController, :create
     put "/cart", CartController, :update
     delete "/cart", CartController, :delete
+
+    get "/search", ProductController, :search
   end
 
   # Other scopes may use custom stacks.

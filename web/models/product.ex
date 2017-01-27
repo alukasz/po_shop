@@ -16,6 +16,12 @@ defmodule PoShop.Product do
     timestamps()
   end
 
+  def search(query, search_term, limit \\ 0.3) do
+    from(p in query,
+    where: fragment("similarity(?, ?) > ?", p.name, ^search_term, ^limit),
+    order_by: fragment("similarity(?, ?) DESC", p.name, ^search_term))
+  end
+
   @doc """
   Preloads categories and producents
   """

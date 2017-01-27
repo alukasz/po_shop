@@ -34,7 +34,24 @@
 
           <!-- This "nav-menu" is hidden on mobile -->
           <!-- Add the modifier "is-active" to display it on mobile -->
+
+
           <div class="nav-right nav-menu">
+            <span class="nav-item">
+              <form class="" action="/search" method="get">
+                <div class="control is-horizontal">
+                  <div class="control is-grouped">
+                    <p class="control is-expanded">
+                      <input class="input" type="search" name="q" placeholder="Szukaj produktów" value="<%= @conn.params["q"] %>">
+                    </p>
+                    <p class="control">
+                      <input class="button is-primary" type="submit" value="Szukaj">
+                    </p>
+                  </div>
+                </div>
+              </form>
+            </span>
+
             <span class="nav-item">
               <a class="button is-primary" href="<%= category_product_path(@conn, :index, 1) %>">
                 <span>Sklep</span>
